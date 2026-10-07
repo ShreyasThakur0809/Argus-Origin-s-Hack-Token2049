@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+/* Apple design language: SF type, system colors, soft depth, no hard chrome. */
+@theme {
+  /* text */
+  --color-label: #1d1d1f;
+  --color-label-soft: #424245;
+  --color-muted: #6e6e73;
+  --color-meta: #86868b;
+
+  /* surfaces + separators */
+  --color-paper: #fbfbfd;
+  --color-surface: #f5f5f7;
+  --color-surface-warm: #fbfbfd;
+  --color-sep: #d2d2d7;
+  --color-sep-soft: #e8e8ed;
+  --color-night: #161617;
+
+  /* accents */
+  --color-blue: #0071e3;
+  --color-blue-hover: #0077ed;
+  --color-link: #0066cc;
+  --color-blue-tint: #e8f1fb;
+  --color-green: #30d158;
+  --color-green-deep: #248a3d;
+  --color-red: #ff3b30;
+  --color-red-deep: #c22e24;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-lift: 0 12px 40px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #ffffff;
+  color: var(--color-label);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* One stray element should never give the page a horizontal scrollbar. */
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-blue);
+  color: #fff;
+}
+
+.scroll-thin::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: var(--color-sep);
+  border-radius: 3px;
+}
+
+/* Apple-style filled field: no border, surface fill, blue focus ring. */
+.field {
+  width: 100%;
+  border-radius: 12px;
+  background: var(--color-surface);
+  padding: 11px 14px;
+  font-size: 14px;
+  color: var(--color-label);
+  outline: none;
+  transition: box-shadow 0.15s ease;
+}
+.field:focus {
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.25), inset 0 0 0 1px var(--color-blue);
+}
+.field::placeholder {
+  color: var(--color-meta);
+}
+
+/* Staged entrance: elements rise and fade in on load. Pair .reveal with an
+   inline animationDelay for the stagger — works in server components. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.reveal {
+  animation: rise 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation: none;
+  }
+}

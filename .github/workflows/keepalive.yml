@@ -1,0 +1,23 @@
+# Keeps the Render free-tier services warm so the demo never waits on a cold
+# start. Render sleeps services after ~15 min without traffic; we ping all
+# three every 10. Facilitator first: the marketplace's startup probe depends
+# on it. Frontend last: Next.js just needs one request to stay warm.
+#
+# GitHub scheduled runs are best-effort and can lag — that is fine, a delayed
+# ping still resets the idle timer. A failed run emails us = free uptime alert.
+name: keepalive
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Facilitator
+        run: curl -sfS --retry 2 --max-time 120 https://query402-facilitator.onrender.com/supported
+      - name: Marketplace
+        run: curl -sfS --retry 2 --max-time 120 https://query402-marketplace.onrender.com/health
+      - name: Frontend
+        run: curl -sfS --retry 2 --max-time 120 -o /dev/null https://argus402.onrender.com/
